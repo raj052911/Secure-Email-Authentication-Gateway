@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <h2>Security Reports</h2>
+    <p>Generate downloadable email authentication security reports.</p>
+</div>
+
+<div class="tool-card">
+
+    <h3>Automatic Security Report</h3>
+
+    <p>
+        Enter a domain to automatically retrieve its SPF and DMARC
+        DNS records. Upload an original signed email to verify DKIM.
+    </p>
+
+    <form action="{{ url_for('reports.automatic_download') }}"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label>Domain Name</label>
+
+            <input type="text"
+                   name="domain"
+                   placeholder="example.com"
+                   required>
+        </div>
+
+        <hr>
+
+        <h4>DKIM Verification (Optional)</h4>
+
+        <div class="form-group">
+            <label>Upload Original Email (.eml)</label>
+
+            <input type="file"
+                   name="email_file"
+                   accept=".eml">
+
+            <small>
+                Upload an original signed email to perform
+                DKIM cryptographic verification.
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Generate Automatic PDF Report
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

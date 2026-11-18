@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Email Header Analyzer | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>Email Header Analyzer</h2>
+
+        <p>
+            Upload an email file or paste raw email content
+            to inspect its headers.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-10">
+
+        <div class="tool-card">
+
+            <h5>Analyze Email</h5>
+
+            <p>
+                Select an .eml file or paste your raw email content.
+            </p>
+
+            <form method="POST"
+                  enctype="multipart/form-data">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Upload Email File (.eml)
+                    </label>
+
+                    <input
+                        type="file"
+                        name="email_file"
+                        class="form-control"
+                        accept=".eml"
+                    >
+
+                </div>
+
+
+                <div class="text-center mb-3">
+                    <strong>OR</strong>
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Paste Raw Email Content
+                    </label>
+
+                    <textarea
+                        name="raw_email"
+                        class="form-control"
+                        rows="10"
+                        placeholder="From: sender@example.com&#10;To: receiver@example.com&#10;Subject: Test Email"
+                    ></textarea>
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">
+
+                    Analyze Email
+
+                </button>
+
+                <button type="reset" class="btn btn-secondary">
+
+                    Clear
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+    <strong>Analysis Error:</strong> {{ error }}
+</div>
+
+{% endif %}
+
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4 class="mb-4">Email Analysis Results</h4>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered">
+
+            <tbody>
+
+                <tr>
+                    <th>From</th>
+                    <td>{{ results.from }}</td>
+                </tr>
+
+                <tr>
+                    <th>To</th>
+                    <td>{{ results.to }}</td>
+                </tr>
+
+                <tr>
+                    <th>Subject</th>
+                    <td>{{ results.subject }}</td>
+                </tr>
+
+                <tr>
+                    <th>Date</th>
+                    <td>{{ results.date }}</td>
+                </tr>
+
+                <tr>
+                    <th>Return-Path</th>
+                    <td>{{ results.return_path }}</td>
+                </tr>
+
+                <tr>
+                    <th>Reply-To</th>
+                    <td>{{ results.reply_to }}</td>
+                </tr>
+
+                <tr>
+                    <th>Sender</th>
+                    <td>{{ results.sender }}</td>
+                </tr>
+
+                <tr>
+                    <th>Message-ID</th>
+                    <td>{{ results.message_id }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <h5 class="mt-4">Received Headers</h5>
+
+    {% if results.received %}
+
+        {% for header in results.received %}
+
+            <div class="header-result">
+                {{ header }}
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No Received headers found.</p>
+
+    {% endif %}
+
+
+    <h5 class="mt-4">Authentication Results</h5>
+
+    {% if results.authentication_results %}
+
+        {% for header in results.authentication_results %}
+
+            <div class="header-result">
+                {{ header }}
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No Authentication-Results headers found.</p>
+
+    {% endif %}
+
+
+    <h5 class="mt-4">DKIM Signature</h5>
+
+    {% if results.dkim_signature %}
+
+        {% for header in results.dkim_signature %}
+
+            <div class="header-result">
+                {{ header }}
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No DKIM-Signature headers found.</p>
+
+    {% endif %}
+
+
+    <div class="alert alert-info mt-4">
+
+        <strong>Note:</strong>
+
+        These results are extracted from the supplied email.
+        Authentication-Results headers are not independently
+        verified by this analyzer.
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}SPF Analyzer | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>SPF Analyzer</h2>
+
+        <p>
+            Retrieve SPF DNS records and evaluate sending IP addresses.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-9">
+
+        <div class="tool-card">
+
+            <h5>SPF Configuration Analysis</h5>
+
+            <p>
+                Enter the domain and sender information to perform
+                an SPF security check.
+            </p>
+
+            <form method="POST">
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Domain Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('domain', '') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Sending IP Address
+                    </label>
+
+                    <input
+                        type="text"
+                        name="sender_ip"
+                        class="form-control"
+                        placeholder="192.0.2.10"
+                        value="{{ request.form.get('sender_ip', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Sender Email Address (MAIL FROM)
+                    </label>
+
+                    <input
+                        type="email"
+                        name="sender_email"
+                        class="form-control"
+                        placeholder="user@example.com"
+                        value="{{ request.form.get('sender_email', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        HELO/EHLO Hostname (Optional)
+                    </label>
+
+                    <input
+                        type="text"
+                        name="helo"
+                        class="form-control"
+                        placeholder="mail.example.com"
+                        value="{{ request.form.get('helo', '') }}"
+                    >
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">
+
+                    Analyze SPF
+
+                </button>
+
+                <button type="reset" class="btn btn-secondary">
+
+                    Clear
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+
+    <strong>Input Error:</strong> {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4>SPF Analysis Results</h4>
+
+    <hr>
+
+    <p>
+        <strong>Domain:</strong>
+        {{ results.domain }}
+    </p>
+
+    <p>
+        <strong>DNS Lookup Status:</strong>
+
+        <span class="badge bg-info">
+            {{ results.dns_status }}
+        </span>
+    </p>
+
+    <p>
+        <strong>DNS Message:</strong>
+        {{ results.dns_message }}
+    </p>
+
+
+    <h5 class="mt-4">SPF DNS Record</h5>
+
+    {% if results.record %}
+
+        {% if results.record is string %}
+
+            <div class="header-result">
+                {{ results.record }}
+            </div>
+
+        {% else %}
+
+            {% for record in results.record %}
+
+                <div class="header-result">
+                    {{ record }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% else %}
+
+        <p>No SPF record available.</p>
+
+    {% endif %}
+
+
+    <h5 class="mt-4">SPF Mechanisms and Modifiers</h5>
+
+    {% if results.mechanisms %}
+
+        <ul>
+
+            {% for mechanism in results.mechanisms %}
+
+                <li>{{ mechanism }}</li>
+
+            {% endfor %}
+
+        </ul>
+
+    {% else %}
+
+        <p>No SPF mechanisms available.</p>
+
+    {% endif %}
+
+
+    <h5 class="mt-4">SPF Evaluation</h5>
+
+    {% if results.evaluation %}
+
+        <h3 class="spf-result">
+            {{ results.evaluation }}
+        </h3>
+
+        <div class="header-result">
+            {{ results.explanation }}
+        </div>
+
+    {% else %}
+
+        <p>
+            Enter a sending IP address and sender email address
+            to perform SPF evaluation.
+        </p>
+
+    {% endif %}
+
+
+    <div class="alert alert-info mt-4">
+
+        <strong>Important:</strong>
+
+        SPF evaluates the supplied sending IP against the
+        MAIL FROM identity. It does not independently prove
+        that a displayed From header is authentic.
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

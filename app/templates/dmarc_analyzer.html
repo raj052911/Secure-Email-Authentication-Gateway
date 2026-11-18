@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}DMARC Analyzer | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>DMARC Analyzer</h2>
+
+        <p>
+            Retrieve DMARC DNS policies and analyze
+            SPF and DKIM domain alignment.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-10">
+
+        <div class="tool-card">
+
+            <h5>DMARC DNS Lookup</h5>
+
+            <form method="POST">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Domain Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('domain', '') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <hr>
+
+                <h5>DMARC Alignment Evaluation</h5>
+
+                <p>
+                    Provide the results from your SPF and DKIM
+                    authentication checks to evaluate alignment.
+                </p>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Visible From Domain
+                    </label>
+
+                    <input
+                        type="text"
+                        name="from_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('from_domain', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        SPF Authentication Result
+                    </label>
+
+                    <select name="spf_result" class="form-select">
+
+                        <option value="NONE">Not provided</option>
+                        <option value="PASS">PASS</option>
+                        <option value="FAIL">FAIL</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        SPF Authenticated Domain
+                    </label>
+
+                    <input
+                        type="text"
+                        name="spf_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('spf_domain', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        DKIM Authentication Result
+                    </label>
+
+                    <select name="dkim_result" class="form-select">
+
+                        <option value="NONE">Not provided</option>
+                        <option value="PASS">PASS</option>
+                        <option value="FAIL">FAIL</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        DKIM Signing Domain
+                    </label>
+
+                    <input
+                        type="text"
+                        name="dkim_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('dkim_domain', '') }}"
+                    >
+
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">
+                    Analyze DMARC
+                </button>
+
+                <button type="reset" class="btn btn-secondary">
+                    Clear
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+
+    <strong>Analysis Error:</strong>
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4>DMARC Analysis Results</h4>
+
+    <hr>
+
+    <p>
+        <strong>Domain:</strong>
+        {{ results.domain }}
+    </p>
+
+    <p>
+        <strong>DNS Lookup Status:</strong>
+
+        <span class="badge bg-info">
+            {{ results.dns_status }}
+        </span>
+    </p>
+
+    <p>
+        <strong>DNS Message:</strong>
+        {{ results.dns_message }}
+    </p>
+
+
+    <h5 class="mt-4">DMARC DNS Record</h5>
+
+    {% if results.record %}
+
+        <div class="header-result">
+            {{ results.record }}
+        </div>
+
+    {% else %}
+
+        <p>No DMARC record found.</p>
+
+    {% endif %}
+
+
+    {% if results.policy %}
+
+    <h5 class="mt-4">DMARC Policy Details</h5>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered">
+
+            <tbody>
+
+                <tr>
+                    <th>Version</th>
+                    <td>{{ results.policy.version }}</td>
+                </tr>
+
+                <tr>
+                    <th>Domain Policy</th>
+                    <td>{{ results.policy.policy }}</td>
+                </tr>
+
+                <tr>
+                    <th>Subdomain Policy</th>
+                    <td>{{ results.policy.subdomain_policy }}</td>
+                </tr>
+
+                <tr>
+                    <th>SPF Alignment</th>
+                    <td>{{ results.policy.spf_alignment }}</td>
+                </tr>
+
+                <tr>
+                    <th>DKIM Alignment</th>
+                    <td>{{ results.policy.dkim_alignment }}</td>
+                </tr>
+
+                <tr>
+                    <th>Aggregate Reports</th>
+                    <td>{{ results.policy.aggregate_reports }}</td>
+                </tr>
+
+                <tr>
+                    <th>Forensic Reports</th>
+                    <td>{{ results.policy.forensic_reports }}</td>
+                </tr>
+
+                <tr>
+                    <th>Policy Percentage</th>
+                    <td>{{ results.policy.percentage }}%</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+
+    {% if results.evaluation %}
+
+    <h5 class="mt-4">DMARC Alignment Evaluation</h5>
+
+    <p>
+        <strong>SPF Alignment:</strong>
+
+        {% if results.evaluation.spf_aligned %}
+            <span class="badge bg-success">PASS</span>
+        {% else %}
+            <span class="badge bg-danger">FAIL</span>
+        {% endif %}
+    </p>
+
+
+    <p>
+        <strong>DKIM Alignment:</strong>
+
+        {% if results.evaluation.dkim_aligned %}
+            <span class="badge bg-success">PASS</span>
+        {% else %}
+            <span class="badge bg-danger">FAIL</span>
+        {% endif %}
+    </p>
+
+
+    {% if results.evaluation.status == "PASS" %}
+
+        <div class="alert alert-success">
+
+            <h4>DMARC PASS</h4>
+
+            {{ results.evaluation.explanation }}
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-danger">
+
+            <h4>DMARC FAIL</h4>
+
+            {{ results.evaluation.explanation }}
+
+        </div>
+
+    {% endif %}
+
+    {% endif %}
+
+
+    <div class="alert alert-info mt-4">
+
+        <strong>Important:</strong>
+
+        SPF and DKIM results entered above are supplied by the user.
+        This module evaluates their alignment but does not independently
+        authenticate the email again. The lookup checks the exact
+        domain entered and does not currently perform organizational
+        domain fallback discovery.
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

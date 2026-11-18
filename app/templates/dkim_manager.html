@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}DKIM Manager | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+    <div>
+        <h2>DKIM Manager</h2>
+        <p>Generate RSA keys and prepare DKIM DNS records.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-9">
+
+        <div class="tool-card">
+
+            <h5>Generate DKIM Key Pair</h5>
+
+            <p>
+                Enter your domain and selector to generate
+                a 2048-bit RSA key pair.
+            </p>
+
+            <form method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label">Domain Name</label>
+
+                    <input
+                        type="text"
+                        name="domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        required
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">DKIM Selector</label>
+
+                    <input
+                        type="text"
+                        name="selector"
+                        class="form-control"
+                        placeholder="default"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Generate DKIM Keys
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+    <strong>Error:</strong> {{ error }}
+</div>
+
+{% endif %}
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4>DKIM Key Generation Results</h4>
+
+    <hr>
+
+    <p>
+        <strong>Domain:</strong>
+        {{ results.domain }}
+    </p>
+
+    <p>
+        <strong>Selector:</strong>
+        {{ results.selector }}
+    </p>
+
+    <p>
+        <strong>Key Size:</strong>
+        {{ results.key_size }} bits
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span class="badge bg-success">
+            {{ results.status }}
+        </span>
+    </p>
+
+    <h5 class="mt-4">DNS Configuration</h5>
+
+    <label class="form-label">DNS Host / Name</label>
+
+    <div class="header-result">
+        {{ results.dns_name }}
+    </div>
+
+    <label class="form-label mt-3">Record Type</label>
+
+    <div class="header-result">
+        TXT
+    </div>
+
+    <label class="form-label mt-3">DNS TXT Value</label>
+
+    <div class="header-result">
+        {{ results.dns_value }}
+    </div>
+
+    <h5 class="mt-4">Private Key Storage</h5>
+
+    <div class="alert alert-success">
+        Private key successfully generated and saved locally.
+    </div>
+
+    <div class="header-result">
+        {{ results.private_key_path }}
+    </div>
+
+    <div class="alert alert-warning mt-4">
+        <strong>Security Warning:</strong>
+        Keep your private key confidential. Never publish it
+        in DNS records or upload it to GitHub.
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

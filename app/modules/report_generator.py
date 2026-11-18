@@ -1,0 +1,214 @@
+import os
+from datetime import datetime
+
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import (
+    SimpleDocTemplate,
+    Paragraph,
+    Spacer,
+    Table,
+    TableStyle,
+    HRFlowable
+)
+from reportlab.lib.enums import TA_CENTER
+from xml.sax.saxutils import escape
+
+
+def generate_security_report(report_data, output_path):
+    """
+    Generate a PDF report containing SPF, DKIM and DMARC
+    email authentication analysis.
+    """
+
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+
+    document = SimpleDocTemplate(
+        output_path,
+        pagesize=A4,
+        rightMargin=45,
+        leftMargin=45,
+        topMargin=45,
+        bottomMargin=45
+    )
+
+    styles = getSampleStyleSheet()
+
+    title_style = ParagraphStyle(
+        "ReportTitle",
+        parent=styles["Title"],
+        fontSize=20,
+        alignment=TA_CENTER,
+        textColor=colors.HexColor("#17365D"),
+        spaceAfter=10
+    )
+
+    heading_style = ParagraphStyle(
+        "SectionHeading",
+        parent=styles["Heading2"],
+        fontSize=13,
+        textColor=colors.HexColor("#17365D"),
+        spaceBefore=15,
+        spaceAfter=8
+    )
+
+    normal_style = styles["BodyText"]
+
+    story = []
+
+    # Report title
+    story.append(Paragraph(
+        "EMAIL SECURITY ANALYSIS REPORT",
+        title_style
+    ))
+
+    story.append(Paragraph(
+        "Secure Email Authentication Gateway",
+        ParagraphStyle(
+            "Subtitle",
+            parent=normal_style,
+            alignment=TA_CENTER,
+            textColor=colors.grey
+        )
+    ))
+
+    story.append(Spacer(1, 20))
+    story.append(HRFlowable(width="100%", thickness=1))
+    story.append(Spacer(1, 15))
+
+    # Domain information
+    domain = escape(str(report_data.get("domain", "Not provided")))
+    report_date = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+    story.append(Paragraph("1. Domain Information", heading_style))
+
+    domain_data = [
+        ["Domain", domain],
+        ["Report Generated", report_date],
+        ["Report Type", "Email Authentication Analysis"]
+    ]
+
+    domain_table = Table(domain_data, colWidths=[150, 330])
+
+    domain_table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#EAF0F8")),
+        ("TEXTCOLOR", (0, 0), (-1, -1), colors.black),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("PADDING", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "TOP")
+    ]))
+
+    story.append(domain_table)
+
+    # SPF analysis
+    story.append(Paragraph("2. SPF Analysis", heading_style))
+
+    spf_data = [
+        ["SPF Status", str(report_data.get("spf_status", "Not analyzed"))],
+        ["SPF Record", str(report_data.get("spf_record", "Not available"))]
+    ]
+
+    story.append(create_table(spf_data))
+
+    # DKIM analysis
+    story.append(Paragraph("3. DKIM Analysis", heading_style))
+
+    dkim_data = [
+        ["DKIM Status", str(report_data.get("dkim_status", "Not analyzed"))],
+        ["DKIM Domain", str(report_data.get("dkim_domain", "Not available"))],
+        ["DKIM Selector", str(report_data.get("dkim_selector", "Not available"))]
+    ]
+
+    story.append(create_table(dkim_data))
+
+    # DMARC analysis
+    story.append(Paragraph("4. DMARC Analysis", heading_style))
+
+    dmarc_data = [
+        ["DMARC Status", str(report_data.get("dmarc_status", "Not analyzed"))],
+        ["DMARC Record", str(report_data.get("dmarc_record", "Not available"))],
+        ["DMARC Policy", str(report_data.get("dmarc_policy", "Not available"))]
+    ]
+
+    story.append(create_table(dmarc_data))
+
+    # Security findings
+    story.append(Paragraph("5. Security Findings", heading_style))
+
+    findings = report_data.get("findings", [])
+
+    if not findings:
+        findings = ["No additional findings provided."]
+
+    for finding in findings:
+        story.append(Paragraph(
+            "• " + escape(str(finding)),
+            normal_style
+        ))
+        story.append(Spacer(1, 5))
+
+    # Recommendations
+    story.append(Paragraph("6. Security Recommendations", heading_style))
+
+    recommendations = report_data.get("recommendations", [])
+
+    if not recommendations:
+        recommendations = [
+            "Publish and maintain a valid SPF record.",
+            "Configure DKIM signing and publish the public key in DNS.",
+            "Publish a valid DMARC record.",
+            "Monitor authentication failures and review DMARC reports."
+        ]
+
+    for recommendation in recommendations:
+        story.append(Paragraph(
+            "• " + escape(str(recommendation)),
+            normal_style
+        ))
+        story.append(Spacer(1, 5))
+
+    story.append(Spacer(1, 20))
+    story.append(HRFlowable(width="100%", thickness=0.5))
+    story.append(Spacer(1, 8))
+
+    story.append(Paragraph(
+        "Generated by Secure Email Authentication Gateway. "
+        "This report summarizes the supplied analysis results and "
+        "does not guarantee that an email is safe.",
+        ParagraphStyle(
+            "Footer",
+            parent=normal_style,
+            fontSize=8,
+            textColor=colors.grey,
+            alignment=TA_CENTER
+        )
+    ))
+
+    document.build(story)
+
+    return output_path
+
+
+def create_table(data):
+    """Create a consistently styled PDF table."""
+
+    formatted_data = []
+
+    for row in data:
+        formatted_data.append([
+            Paragraph(escape(str(cell)), getSampleStyleSheet()["BodyText"])
+            for cell in row
+        ])
+
+    table = Table(formatted_data, colWidths=[150, 330])
+
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#EAF0F8")),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("PADDING", (0, 0), (-1, -1), 8),
+        ("VALIGN", (0, 0), (-1, -1), "TOP")
+    ]))
+
+    return table

@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>Email Security Dashboard</h2>
+
+        <p>
+            Monitor and analyze email authentication using
+            SPF, DKIM and DMARC.
+        </p>
+    </div>
+
+    <div class="date-card">
+        <small>Today's Date</small>
+        <h6 id="currentDate">Loading...</h6>
+    </div>
+
+</div>
+
+
+<div class="section-title">
+    Authentication Overview
+</div>
+
+
+<div class="row g-3">
+
+    <div class="col-md-4">
+
+        <div class="security-card">
+
+            <div class="card-icon spf-icon">S</div>
+
+            <div>
+                <h5>SPF Authentication</h5>
+                <h3 class="status-pending">Not Checked</h3>
+                <small>Sender Policy Framework</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="security-card">
+
+            <div class="card-icon dkim-icon">D</div>
+
+            <div>
+                <h5>DKIM Authentication</h5>
+                <h3 class="status-pending">Not Checked</h3>
+                <small>DomainKeys Identified Mail</small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="security-card">
+
+            <div class="card-icon dmarc-icon">M</div>
+
+            <div>
+                <h5>DMARC Authentication</h5>
+                <h3 class="status-pending">Not Checked</h3>
+                <small>Domain-based Message Authentication</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="section-title mt-5">
+    Email Security Tools
+</div>
+
+
+<div class="row g-4">
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">✉</div>
+
+            <h5>Email Header Analyzer</h5>
+
+            <p>
+                Analyze email headers and inspect sender,
+                recipient and authentication information.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">◈</div>
+
+            <h5>SPF Analyzer</h5>
+
+            <p>
+                Retrieve SPF DNS records and evaluate
+                sender authorization.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">🔑</div>
+
+            <h5>DKIM Manager</h5>
+
+            <p>
+                Generate DKIM public and private keys
+                and prepare DNS records.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">✓</div>
+
+            <h5>DKIM Signature Verifier</h5>
+
+            <p>
+                Verify the DKIM cryptographic signature
+                of an original signed email.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">◆</div>
+
+            <h5>DMARC Analyzer</h5>
+
+            <p>
+                Analyze DMARC policies and inspect
+                SPF and DKIM alignment.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-6 col-xl-4">
+
+        <div class="tool-card">
+
+            <div class="tool-icon">⚠</div>
+
+            <h5>Spoofing Simulator</h5>
+
+            <p>
+                Simulate email spoofing scenarios
+                in a controlled environment.
+            </p>
+
+            <span class="feature-status">Coming in next phase</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="info-panel mt-5">
+
+    <h5>About This Platform</h5>
+
+    <p>
+        Secure Email Authentication Gateway is an email security
+        analysis platform designed to examine SPF, DKIM and DMARC
+        authentication mechanisms.
+    </p>
+
+    <p class="mb-0">
+        <strong>Current development stage:</strong>
+        Dashboard implementation.
+    </p>
+
+</div>
+
+{% endblock %}

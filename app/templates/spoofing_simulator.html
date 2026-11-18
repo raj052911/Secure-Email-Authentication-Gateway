@@ -1,0 +1,387 @@
+{% extends "base.html" %}
+
+{% block title %}Spoofing Simulator | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>Email Spoofing Simulator</h2>
+
+        <p>
+            Simulate SPF, DKIM and DMARC authentication
+            outcomes in a controlled environment.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="alert alert-warning">
+
+    <strong>Simulation Only:</strong>
+
+    This tool does not send emails, modify DNS records
+    or perform actual email spoofing. Authentication
+    outcomes are supplied as hypothetical test inputs.
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-10">
+
+        <div class="tool-card">
+
+            <h5>Configure Simulation</h5>
+
+            <form method="POST">
+
+                <h6 class="mt-3 mb-3">Email Identity</h6>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Visible From Domain
+                    </label>
+
+                    <input
+                        type="text"
+                        name="from_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('from_domain', '') }}"
+                        required
+                    >
+
+                </div>
+
+
+                <hr>
+
+                <h6 class="mb-3">SPF Configuration</h6>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        SPF Authentication Result
+                    </label>
+
+                    <select
+                        name="spf_result"
+                        class="form-select"
+                    >
+
+                        <option value="PASS">PASS</option>
+                        <option value="FAIL" selected>FAIL</option>
+                        <option value="NONE">NONE</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        SPF Authenticated Domain (MAIL FROM)
+                    </label>
+
+                    <input
+                        type="text"
+                        name="spf_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('spf_domain', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        SPF Alignment Mode
+                    </label>
+
+                    <select
+                        name="spf_alignment"
+                        class="form-select"
+                    >
+
+                        <option value="r" selected>
+                            Relaxed
+                        </option>
+
+                        <option value="s">
+                            Strict
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <hr>
+
+                <h6 class="mb-3">DKIM Configuration</h6>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        DKIM Authentication Result
+                    </label>
+
+                    <select
+                        name="dkim_result"
+                        class="form-select"
+                    >
+
+                        <option value="PASS">PASS</option>
+                        <option value="FAIL" selected>FAIL</option>
+                        <option value="NONE">NONE</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        DKIM Signing Domain
+                    </label>
+
+                    <input
+                        type="text"
+                        name="dkim_domain"
+                        class="form-control"
+                        placeholder="example.com"
+                        value="{{ request.form.get('dkim_domain', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        DKIM Alignment Mode
+                    </label>
+
+                    <select
+                        name="dkim_alignment"
+                        class="form-select"
+                    >
+
+                        <option value="r" selected>
+                            Relaxed
+                        </option>
+
+                        <option value="s">
+                            Strict
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <hr>
+
+                <h6 class="mb-3">DMARC Configuration</h6>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        DMARC Policy
+                    </label>
+
+                    <select
+                        name="dmarc_policy"
+                        class="form-select"
+                    >
+
+                        <option value="none">
+                            None (Monitoring)
+                        </option>
+
+                        <option value="quarantine">
+                            Quarantine
+                        </option>
+
+                        <option value="reject" selected>
+                            Reject
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Run Security Simulation
+                </button>
+
+                <button
+                    type="reset"
+                    class="btn btn-secondary"
+                >
+                    Clear
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+
+    <strong>Simulation Error:</strong>
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4>Simulation Results</h4>
+
+    <hr>
+
+    <p>
+        <strong>Visible From Domain:</strong>
+        {{ results.from_domain }}
+    </p>
+
+
+    <h5 class="mt-4">SPF Authentication</h5>
+
+    <p>
+        <strong>Result:</strong>
+        {{ results.spf_result }}
+    </p>
+
+    <p>
+        <strong>Authenticated Domain:</strong>
+        {{ results.spf_domain }}
+    </p>
+
+    <p>
+        <strong>SPF Alignment:</strong>
+
+        {% if results.spf_aligned %}
+
+            <span class="badge bg-success">PASS</span>
+
+        {% else %}
+
+            <span class="badge bg-danger">FAIL</span>
+
+        {% endif %}
+
+    </p>
+
+
+    <h5 class="mt-4">DKIM Authentication</h5>
+
+    <p>
+        <strong>Result:</strong>
+        {{ results.dkim_result }}
+    </p>
+
+    <p>
+        <strong>Signing Domain:</strong>
+        {{ results.dkim_domain }}
+    </p>
+
+    <p>
+        <strong>DKIM Alignment:</strong>
+
+        {% if results.dkim_aligned %}
+
+            <span class="badge bg-success">PASS</span>
+
+        {% else %}
+
+            <span class="badge bg-danger">FAIL</span>
+
+        {% endif %}
+
+    </p>
+
+
+    <hr>
+
+    <h5>DMARC Evaluation</h5>
+
+    <p>
+        <strong>Configured Policy:</strong>
+        {{ results.dmarc_policy }}
+    </p>
+
+
+    {% if results.dmarc_status == "PASS" %}
+
+        <div class="alert alert-success">
+
+            <h4>DMARC PASS</h4>
+
+            {{ results.explanation }}
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-danger">
+
+            <h4>DMARC FAIL</h4>
+
+            {{ results.explanation }}
+
+        </div>
+
+    {% endif %}
+
+
+    <h5 class="mt-4">Recommended Handling</h5>
+
+    <div class="simulation-result">
+
+        {{ results.handling }}
+
+    </div>
+
+
+    <div class="alert alert-info mt-4">
+
+        <strong>Note:</strong>
+
+        This is a simplified policy simulation. Real receivers
+        may apply additional local policy, DMARC percentage
+        sampling, organizational-domain discovery and other
+        mail-handling rules. This application does not enforce
+        any action on a mail server.
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

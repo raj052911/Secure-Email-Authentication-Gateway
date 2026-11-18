@@ -1,0 +1,702 @@
+/* ==============================
+   GLOBAL STYLES
+================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f6fb;
+    font-family: Arial, sans-serif;
+    color: #263247;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* ==============================
+   SIDEBAR
+================================= */
+
+.sidebar {
+    width: 260px;
+    background: #17243a;
+    color: white;
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 10px 30px;
+}
+
+.brand-icon {
+    background: #3978ed;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.brand h5 {
+    margin: 0;
+    font-size: 17px;
+}
+
+.brand small {
+    color: #aebbd0;
+    font-size: 10px;
+}
+
+.sidebar-heading {
+    color: #8492a9;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 15px 12px 8px;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    flex: 1;
+}
+
+.nav-link {
+    display: block;
+    color: #c5cfdd;
+    padding: 12px;
+    margin: 3px 0;
+    border-radius: 7px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.nav-link span {
+    display: inline-block;
+    width: 28px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #2c405e;
+    color: white;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #34445b;
+    padding: 20px 10px 5px;
+    font-size: 12px;
+    color: #c5cfdd;
+}
+
+.status-dot {
+    display: inline-block;
+    background: #27c98b;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 7px;
+}
+
+
+/* ==============================
+   MAIN CONTENT
+================================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    height: 75px;
+    background: white;
+    border-bottom: 1px solid #e8ebf1;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    gap: 15px;
+}
+
+.topbar h6 {
+    margin: 0;
+    font-weight: bold;
+}
+
+.topbar small {
+    color: #8490a3;
+    font-size: 11px;
+}
+
+.topbar-right {
+    margin-left: auto;
+}
+
+.environment-badge {
+    background: #eaf2ff;
+    color: #3474d8;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.menu-toggle {
+    display: none;
+    border: none;
+    background: transparent;
+    font-size: 23px;
+    cursor: pointer;
+}
+
+.page-content {
+    padding: 30px;
+    min-height: calc(100vh - 125px);
+}
+
+
+/* ==============================
+   WELCOME SECTION
+================================= */
+
+.welcome-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    gap: 20px;
+}
+
+.welcome-section h2 {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.welcome-section p {
+    color: #7d899b;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.date-card {
+    background: white;
+    padding: 13px 20px;
+    border-radius: 9px;
+    border: 1px solid #e8ebf1;
+    min-width: 150px;
+}
+
+.date-card small {
+    color: #8a96a8;
+}
+
+.date-card h6 {
+    margin-top: 5px;
+}
+
+
+/* ==============================
+   DASHBOARD CARDS
+================================= */
+
+.section-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.security-card {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    border: 1px solid #e8ebf1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 100%;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.spf-icon {
+    background: #e8f1ff;
+    color: #3474d8;
+}
+
+.dkim-icon {
+    background: #f1eaff;
+    color: #8657ce;
+}
+
+.dmarc-icon {
+    background: #e5f8f1;
+    color: #21966b;
+}
+
+.security-card h5 {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.security-card h3 {
+    font-size: 16px;
+    margin: 7px 0;
+}
+
+.security-card small {
+    font-size: 11px;
+    color: #8a96a8;
+}
+
+.status-pending {
+    color: #c18b28;
+}
+
+
+/* ==============================
+   TOOL CARDS
+================================= */
+
+.tool-card {
+    background: white;
+    padding: 24px;
+    border: 1px solid #e8ebf1;
+    border-radius: 10px;
+    height: 100%;
+    transition: 0.2s;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    border-color: #8eb5f5;
+    box-shadow: 0 8px 20px rgba(30, 60, 100, 0.07);
+}
+
+.tool-icon {
+    width: 45px;
+    height: 45px;
+    background: #eaf2ff;
+    color: #3474d8;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 18px;
+}
+
+.tool-card h5 {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.tool-card p {
+    font-size: 12px;
+    color: #7d899b;
+    line-height: 1.7;
+    min-height: 60px;
+}
+
+.tool-card hr {
+    margin: 25px 0;
+    border-color: #e5e9f0;
+}
+
+.feature-status {
+    display: inline-block;
+    background: #fff5df;
+    color: #a87517;
+    padding: 6px 9px;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+
+/* ==============================
+   INFORMATION PANEL
+================================= */
+
+.info-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #e8ebf1;
+}
+
+.info-panel h5 {
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.info-panel p {
+    color: #7d899b;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+
+/* ==============================
+   FOOTER
+================================= */
+
+.footer {
+    background: white;
+    border-top: 1px solid #e8ebf1;
+    text-align: center;
+    padding: 18px;
+    font-size: 11px;
+    color: #8a96a8;
+}
+
+
+/* ==============================
+   FORM CONTROLS
+================================= */
+
+.form-label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #344258;
+}
+
+.form-control,
+.form-select {
+    font-size: 13px;
+    padding: 11px;
+    border: 1px solid #dce2eb;
+    border-radius: 7px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #3978ed;
+    box-shadow: 0 0 0 0.15rem rgba(57, 120, 237, 0.15);
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.btn {
+    font-size: 13px;
+    padding: 10px 18px;
+    border-radius: 6px;
+}
+
+
+/* ==============================
+   EMAIL HEADER ANALYZER
+================================= */
+
+.header-result {
+    background: #f4f6fb;
+    border: 1px solid #e5e9f0;
+    border-radius: 7px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+    line-height: 1.7;
+}
+
+.table th {
+    width: 180px;
+    background: #f4f6fb;
+    font-size: 13px;
+}
+
+.table td {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+
+/* ==============================
+   SPF ANALYZER
+================================= */
+
+.spf-result {
+    display: inline-block;
+    background: #eaf2ff;
+    color: #2768c9;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+
+/* ==============================
+   DKIM MANAGER
+================================= */
+
+.dkim-result {
+    display: inline-block;
+    background: #f1eaff;
+    color: #8657ce;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+
+/* ==============================
+   DMARC ANALYZER
+================================= */
+
+.dmarc-result {
+    display: inline-block;
+    background: #e5f8f1;
+    color: #21966b;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+
+/* ==============================
+   EMAIL SPOOFING SIMULATOR
+================================= */
+
+.simulation-result {
+    display: inline-block;
+    background: #eaf2ff;
+    color: #2768c9;
+    padding: 14px 25px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.simulation-result:hover {
+    background: #dceaff;
+}
+
+.alert {
+    font-size: 13px;
+    line-height: 1.7;
+    border-radius: 8px;
+}
+
+.alert h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.badge {
+    font-size: 11px;
+    padding: 7px 10px;
+}
+
+
+/* ==============================
+   RESULT SECTIONS
+================================= */
+
+.info-panel hr {
+    border-color: #e5e9f0;
+    margin: 20px 0;
+}
+
+.info-panel h4 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.info-panel h5 {
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.info-panel ul {
+    padding-left: 22px;
+}
+
+.info-panel li {
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+
+/* ==============================
+   RESPONSIVE DESIGN
+================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -260px;
+        z-index: 1000;
+        transition: 0.3s;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .page-content {
+        padding: 20px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .welcome-section {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .environment-badge {
+        display: none;
+    }
+
+    .page-content {
+        padding: 15px;
+    }
+
+    .tool-card,
+    .info-panel {
+        padding: 18px;
+    }
+
+    .security-card {
+        padding: 16px;
+    }
+
+    .table th {
+        width: 120px;
+    }
+
+    .simulation-result {
+        font-size: 17px;
+        padding: 12px 18px;
+    }
+
+}
+/* =========================================
+   SECURITY REPORT FORM
+========================================= */
+
+.tool-card form {
+    margin-top: 25px;
+}
+
+.tool-card form h4 {
+    color: #243b60;
+    font-size: 19px;
+    font-weight: 600;
+    margin-top: 25px;
+    margin-bottom: 18px;
+}
+
+.tool-card form .form-group {
+    margin-bottom: 20px;
+}
+
+.tool-card form label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #344563;
+    margin-bottom: 8px;
+}
+
+.tool-card form input[type="text"],
+.tool-card form select,
+.tool-card form textarea {
+    display: block;
+    width: 100%;
+    max-width: 650px;
+    padding: 11px 14px;
+    border: 1px solid #d5dce8;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #26364d;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.tool-card form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.tool-card form input:focus,
+.tool-card form select:focus,
+.tool-card form textarea:focus {
+    border-color: #3978d5;
+    box-shadow: 0 0 0 3px rgba(57, 120, 213, 0.12);
+}
+
+.tool-card form hr {
+    border: none;
+    border-top: 1px solid #e5eaf1;
+    margin: 28px 0;
+}
+
+.tool-card form button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 7px;
+    background: #2868c7;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tool-card form button:hover {
+    background: #194f9e;
+    transform: translateY(-1px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .tool-card form input[type="text"],
+    .tool-card form select,
+    .tool-card form textarea {
+        max-width: 100%;
+    }
+}

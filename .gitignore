@@ -1,0 +1,26 @@
+# Environment variables
+.env
+.env.*
+
+!.env.example
+
+# Virtual environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Private keys
+keys/
+*.pem
+*.key
+*.priv
+
+# Generated PDF reports
+reports/*.pdf
+
+# IDE files
+.vscode/
+.idea/

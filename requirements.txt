@@ -1,0 +1,16 @@
+Flask
+dnspython
+pyspf
+dkimpy
+cryptography
+python-dotenv
+reportlab
+pytest
+Flask
+python-dotenv
+dnspython
+pyspf
+cryptography
+dkimpy
+dnspython
+publicsuffix2

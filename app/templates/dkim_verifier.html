@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}DKIM Signature Verifier | SecureMail{% endblock %}
+
+{% block content %}
+
+<div class="welcome-section">
+
+    <div>
+        <h2>DKIM Signature Verifier</h2>
+
+        <p>
+            Verify email signatures using DNS public keys
+            and cryptographic validation.
+        </p>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-lg-9">
+
+        <div class="tool-card">
+
+            <h5>Upload Signed Email</h5>
+
+            <p>
+                Upload an original signed email in .eml format.
+            </p>
+
+            <form method="POST" enctype="multipart/form-data">
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Email File (.eml)
+                    </label>
+
+                    <input
+                        type="file"
+                        name="email_file"
+                        class="form-control"
+                        accept=".eml"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+
+                    Verify DKIM Signature
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+
+    <strong>Error:</strong>
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if results %}
+
+<div class="info-panel mt-4">
+
+    <h4>DKIM Verification Results</h4>
+
+    <hr>
+
+    <p>
+        <strong>Signing Domain:</strong>
+        {{ results.domain }}
+    </p>
+
+    <p>
+        <strong>Selector:</strong>
+        {{ results.selector }}
+    </p>
+
+    <p>
+        <strong>Algorithm:</strong>
+        {{ results.algorithm }}
+    </p>
+
+    <p>
+        <strong>DNS Public Key Location:</strong>
+        {{ results.dns_name }}
+    </p>
+
+    <hr>
+
+    <h5>Verification Status</h5>
+
+    {% if results.status == "PASS" %}
+
+        <div class="alert alert-success">
+
+            <h4>DKIM PASS</h4>
+
+            {{ results.explanation }}
+
+        </div>
+
+    {% elif results.status == "FAIL" %}
+
+        <div class="alert alert-danger">
+
+            <h4>DKIM FAIL</h4>
+
+            {{ results.explanation }}
+
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-warning">
+
+            <h4>DKIM ERROR</h4>
+
+            {{ results.explanation }}
+
+        </div>
+
+    {% endif %}
+
+    <div class="alert alert-info">
+
+        <strong>Important:</strong>
+
+        A DKIM PASS means the signature was cryptographically
+        verified using the public key retrieved from DNS.
+        It does not independently establish that the sender
+        is trustworthy or that DMARC alignment passes.
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
